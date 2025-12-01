@@ -22,7 +22,6 @@ export default function TmuxSessions() {
   const { push } = useNavigation();
 
   const loadSessions = useCallback(async () => {
-    // Note: getSessions handles the sorting logic internally now
     const data = await getSessions();
     setSessions(data);
     setIsLoading(false);
@@ -69,30 +68,29 @@ export default function TmuxSessions() {
           <List.Item
             key={session.name}
             title={session.name}
-            subtitle={`${session.windowCount} win • ${session.paneCount} panes`}
             icon={{
-              source: session.attached ? Icon.Terminal : Icon.Circle,
+              source: session.attached ? "🟢" : "⚪",
               tintColor: session.attached ? Color.Green : Color.SecondaryText,
             }}
             accessories={[
               {
+                text: `${session.windowCount} win • ${session.paneCount} panes`,
+                tooltip: "Window/Pane Count",
+              },
+              {
+                // 🕒 Clock for last attached time
                 text: session.lastAttached
-                  ? new Date(session.lastAttached * 1000).toLocaleDateString(
-                      undefined,
-                      {
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      },
-                    )
+                  ? `🕒 ${new Date(
+                      session.lastAttached * 1000,
+                    ).toLocaleDateString(undefined, {
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}`
                   : "",
                 tooltip: "Last attached",
               },
-              { text: session.attached ? "Attached" : "Detached" },
-              ...(session.currentWindow
-                ? [{ icon: Icon.Window, text: session.currentWindow }]
-                : []),
             ]}
             actions={
               <ActionPanel>
@@ -112,7 +110,7 @@ export default function TmuxSessions() {
                 <Action
                   title="Rename Session"
                   icon={Icon.Pencil}
-                  shortcut={{ modifiers: ["cmd"], key: "r" }}
+                  shortcut={{ modifiers: ["ctrl"], key: "r" }}
                   onAction={() =>
                     push(
                       <RenameSessionForm

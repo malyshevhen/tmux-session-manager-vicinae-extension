@@ -101,7 +101,7 @@ export default function WindowList({ sessionName }: { sessionName: string }) {
           key={win.id}
           title={`${win.index}: ${win.name}`}
           icon={{
-            source: win.active ? Icon.CheckCircle : Icon.Circle,
+            source: win.active ? "🟢" : "⚪",
             tintColor: win.active ? Color.Green : Color.SecondaryText,
           }}
           accessories={[{ text: win.active ? "Active" : "" }]}
@@ -115,7 +115,7 @@ export default function WindowList({ sessionName }: { sessionName: string }) {
               <Action
                 title="Rename Window"
                 icon={Icon.Pencil}
-                shortcut={{ modifiers: ["cmd"], key: "r" }}
+                shortcut={{ modifiers: ["ctrl"], key: "r" }}
                 onAction={() =>
                   push(
                     <RenameWindowForm
